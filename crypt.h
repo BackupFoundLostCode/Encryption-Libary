@@ -246,8 +246,8 @@ namespace advance {
         //Generell: mal schauen ob ich die returnarten und auch generell alpassen kann und sollte also alles eiheitlich wenns geht am beten alles bitset.
         //Ach scheiße ich muss das alles doch auf std::bitset anpassen. Also entwerder pures bitset oder auch vector mit bitset. Sollt das auf bitset<8> anpassen, weil ich das ermal nur für buchstaben machen will ansonsten kann die gelichennochmal schireben aber eben mit einzlenen bools oder bitset mit <1>.
 
-        //Logik ist fertig. Fehlen noch indexe auf bitset anpassenund eventuell ist die c and verknüpfung noch nicht ganz richtig.
-        inline std::vector<bool> keystream_trivium_for_ASCII(const std::vector<bool> &message_in_bit) {
+        //Vector stat bool zu bitset<8> vermutlich ersetzen.
+        inline std::vector<std::bitset<8>> keystream_trivium_for_ASCII(const std::vector<std::bitset<8>> &message_in_bit) {
             std::bitset<93> a;
             std::bitset<84> b;
             std::bitset<111> c;
@@ -260,7 +260,8 @@ namespace advance {
             std::cout << "C: " << c << " Länge: " << c.size() << std::endl;
             std::cout << "" << std::endl;
 
-            std::vector<bool> keystream;
+            //ändern zu bitset, im zweifelsfall vector mit einer stelle als bitset ab dem punkt einfach nur ein Bitset.
+            std::vector<std::bitset<8>> keystream;//das in bitset<8> stat bool umändern (?)
             keystream.resize(message_in_bit.size());
 
             for (auto i = 0; i < iv_trivium.size(); i++) {
@@ -277,7 +278,6 @@ namespace advance {
                 a[i + 13] = iv_trivium[i];
             }
             std::cout << "Der gefüllte a mit den iv: " << a << " länge: " << a.size() <<std::endl;
-
             for (auto i = 79; i >= 0; i--) {
                 b[i+ +4] = key[i];
             }
@@ -289,20 +289,37 @@ namespace advance {
             std::cout << "Der gefüllte c mit den einsen: " << c << " länge: " << c.size() <<std::endl;
             std::cout << "" << std::endl;
 
+            //HIER JETZT ABER WIRKLICH NOCHMAL DRÜBER GEHEN, ES KOMMT KOMISCHER KRAM RASU:
+
             //Aufwärmphase:
             //Was in die gatter geschieben wird (indexe dannauch noch an bitset anpassen):  Rückkoblung in a: betweenA = betweenA ^ (a[91]&a[92]) ^ b[78] das wird später in register b geschireben
             //betweenB = betweenB ^ (b[82]&b[83]) ^ c[87] das wird dann ich register c geschireben
             //betweenC betweenC ^ (c[108]&c[110]) ^ a[69] das wird in register a geschireben
             for (auto i =0; i < 1152; i++) {
+                //Bitset: 0 -> max index, sorich wenn array 0 gewollt ist in bitset die 0 der maximale eintrag des bitsets.
                 //Hier sind die indexe vermutlich nicht korrekt, auch die genrelle rechung glaube ich nicht. DAS IST VERMUTLICH DIE LETZE FEHLERQUELLE!
-                bool betweenA = a[66]^a[93];//indexe noch anpassen, ansich aber richtig
-                bool betweenB = b[69]^b[84] ;//Rechenoperation stimmt erstmal, idexe noch änder warscheinlich noch
-                bool betweenC = c[66]^c[111];//auh hier richtig bis auf die indexe
+                //a: 93 -> 0; 66 -> 27. b: 69 -> ; 84 -> ;
+                //bool betweenA = a[66]^a[93];//indexe noch anpassen, ansich aber richtig
+                //bool betweenB = b[69]^b[84] ;//Rechenoperation stimmt erstmal, idexe noch änder warscheinlich noch
+                //bool betweenC = c[66]^c[111];//auh hier richtig bis auf die indexe
 
-                bool insertB = betweenA ^ (a[91]&a[92]) ^ b[78];
-                bool insertC = betweenB ^ (b[82]&b[83]) ^ c[87];
-                bool insertA = betweenC ^ (c[108]&c[110]) ^ a[69];
+                //Vermeindlich nagpasste indexe (oben die orginal fals die falsch):
+                bool betweenA = a[26]^a[0];
+                bool betweenB = b[14]^b[0] ;
+                bool betweenC = c[44]^c[110];
 
+                //Auch noch mal neu machen:
+                //bool insertB = betweenA ^ (a[91]&a[92]) ^ b[78];
+                //bool insertC = betweenB ^ (b[82]&b[83]) ^ c[87];
+                //bool insertA = betweenC ^ (c[108]&c[110]) ^ a[69];
+
+                //Versuch richtige oben drüber:
+                bool insertB = betweenA ^ (a[1]&a[0]) ^ b[5];
+                bool insertC = betweenB ^ (b[1]&b[0]) ^ c[23];
+                bool insertA = betweenC ^ (c[2]&c[0]) ^ a[23];
+
+
+                //Das alles sollte richtigsein.
                 a >>=1;
                 b >>=1;
                 c >>=1;
@@ -315,6 +332,8 @@ namespace advance {
             //Eigentliochen Keystrem erzeugen:
             //das ausgabe bit ist: betweenA ^ betweenB ^ betweenC
             for (auto i = 0; i < keystream.size(); i++) {
+                //Die vermeintlich richtigen:
+                /*
                 bool betweenA = a[66]^a[93];//indexe noch anpassen, ansich aber richtig
                 bool betweenB = b[69]^b[84] ;//Rechenoperation stimmt erstmal, idexe noch änder warscheinlich noch
                 bool betweenC = c[66]^c[111];//auh hier richtig bis auf die indexe
@@ -322,7 +341,19 @@ namespace advance {
                 bool insertB = betweenA ^ (a[91]&a[92]) ^ b[78];
                 bool insertC = betweenB ^ (b[82]&b[83]) ^ c[87];
                 bool insertA = betweenC ^ (c[108]&c[110]) ^ a[69];
+                */
 
+                //Die neuen versuche:
+                bool betweenA = a[26]^a[0];
+                bool betweenB = b[14]^b[0] ;
+                bool betweenC = c[44]^c[110];
+
+                bool insertB = betweenA ^ (a[1]&a[0]) ^ b[5];
+                bool insertC = betweenB ^ (b[1]&b[0]) ^ c[23];
+                bool insertA = betweenC ^ (c[2]&c[0]) ^ a[23];
+
+
+                //Das alles sollte richtigsein.
                 a >>=1;
                 b >>=1;
                 c >>=1;

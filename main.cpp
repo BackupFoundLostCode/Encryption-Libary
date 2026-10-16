@@ -43,13 +43,64 @@ int main() {
      * 4. LFSR
      */
 
-    //Check ob der iv random befüllt wird:
-    std::vector<bool> message = {false,true,true,false,true,true};
-    std::vector<bool> iv = advance::trivium::keystream_trivium(message);
+    int input;
+    std::cout << "[1] OTP\n[2]Trivium" << std::endl;
+    std::cin >> input;
 
-    for (int i = 0; i < iv.size(); i++) {
-        std::cout << iv[i];
+    switch (input) {
+        //Klapt ansich, muss nur nochmal schauen warum er wenn ich euien satz verschlüssel mit leerezieen nur das vor dem ersten lelrzeiechn nimmt (verschlüsselt und entschlüsselt aber richtig) undwarum nach dem insert des keys und der massage dennoch invalit number ausgelöst wird.
+        case 1: {
+            int option;
+            std::cout << "\n[1] Encrypt Message.\n[2] Decrypt Message.";
+            std::cin >> option;
+
+            if (option == 1) {
+                std::string message;
+                std::cout << "OTP:" << std::endl << "Insert your Text:" << std::endl;
+                std::cin >> message;
+                std::vector<std::bitset<8>> message_in_bit = ascii_to_bit(message);
+                std::vector<std::bitset<8>> otp_key = streamCipher::stream_key_OTP(message_in_bit);
+                std::vector<std::bitset<8>> encrypt_message = streamCipher::stream_verschlusseln_OTP(message_in_bit, otp_key);
+
+                std::cout << std::endl;
+                std::cout << "\nYour encrypted Message: " << std::endl;
+                for (auto i : encrypt_message) {
+                    std::cout << i;
+                }
+            }
+            else if (option == 2) {
+                std::string encypt_message;
+                std::string key_for_message;
+                std::cout << "\n Insert Encrypted Message:" << std::endl;
+                std::cin >> encypt_message;
+                std::cout << "\n Insert Key:" << std::endl;
+                std::cin >> key_for_message;
+
+                streamCipher::stream_entschlusseln_OTP(key_for_message, encypt_message);
+            }
+            else {
+                std::cout << "Invalid Number!" << std::endl;
+            }
+
+            break;
+        }
+        default: {
+            std::cout << "Invalid Number!" << std::endl;
+        }
     }
+
+    /*
+    std::string message = "Ich hoffe der Mist klappt endlich!";
+    std::vector<std::bitset<8>> message_in_bit = ascii_to_bit(message);
+    std::vector<std::bitset<8>> keystrem = advance::trivium::keystream_trivium_for_ASCII(message_in_bit);
+
+    //Keystrem ausgeben:
+    std::cout << "DER KEYSTreAM: " << std::endl;
+    for (auto i = 0; i < keystrem.size(); i++) {
+        std::cout << keystrem[i];
+    }
+    */
+
 
 
 
