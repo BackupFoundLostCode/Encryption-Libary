@@ -44,7 +44,8 @@ int main() {
      */
 
     int input;
-    std::cout << "[1] OTP\n[2]Trivium" << std::endl;
+
+    std::cout << "[1] OTP\n[2] Trivium" << std::endl;
     std::cin >> input;
 
     switch (input) {
@@ -81,31 +82,43 @@ int main() {
             else {
                 std::cout << "Invalid Number!" << std::endl;
             }
+            break;
+        }
+        case 2: {
+            int option;
+            std::cout << "\n[1] Encrypt Message.\n[2] Decrypt Message.";
+            std::cin >> option;
 
+            if (option == 1) {
+                std::string clear_message;
+                std::cout << "Insert clear Message:" << std::endl;
+                std::cin >> clear_message;
+
+                std::vector<std::bitset<8>> clear_message_in_bit = ascii_to_bit(clear_message);
+                std::vector<std::bitset<8>> keystream_for_trivium = advance::trivium::keystream_trivium_for_ASCII(clear_message_in_bit);    //Sollte einen keystrema ausgen der so lange in bit ist wie meine mesage in bit.
+                //PROBLEME: 1. Nimmt nur bis zum ersten Leerzeichen. 2. Der Keystream ist irgendwie Müll und hat ein ganz klares Muster.
+                //Das mit dem Muster wird ziemlich sicher an den neuen indexen liegen. Das andere keine Ahnung.
+                for (auto & i : keystream_for_trivium) {
+                    for (auto j =0;j<i.size();j++) {
+                        std::cout << i[j];
+                    }
+                }
+
+            }
+            else if (option == 2) {
+                std::cout << "\n Insert Encrypted Message:" << std::endl;
+
+            }
+            else {
+                std::cout << "Invalid Number!" << std::endl;
+
+            }
             break;
         }
         default: {
             std::cout << "Invalid Number!" << std::endl;
         }
     }
-
-    /*
-    std::string message = "Ich hoffe der Mist klappt endlich!";
-    std::vector<std::bitset<8>> message_in_bit = ascii_to_bit(message);
-    std::vector<std::bitset<8>> keystrem = advance::trivium::keystream_trivium_for_ASCII(message_in_bit);
-
-    //Keystrem ausgeben:
-    std::cout << "DER KEYSTreAM: " << std::endl;
-    for (auto i = 0; i < keystrem.size(); i++) {
-        std::cout << keystrem[i];
-    }
-    */
-
-
-
-
-
-
 
     return 0;
 }

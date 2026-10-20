@@ -193,6 +193,15 @@ namespace streamCipher  {
 //
 namespace advance {
 
+    namespace modi {
+        //für die Breueibsmode CTR, ECB,CTC, usw.
+
+
+
+
+
+        }
+
     inline void right_shift_register(const int chiffts) {
         std::bitset<8> shiftRegister;
 
@@ -299,25 +308,14 @@ namespace advance {
                 //Bitset: 0 -> max index, sorich wenn array 0 gewollt ist in bitset die 0 der maximale eintrag des bitsets.
                 //Hier sind die indexe vermutlich nicht korrekt, auch die genrelle rechung glaube ich nicht. DAS IST VERMUTLICH DIE LETZE FEHLERQUELLE!
                 //a: 93 -> 0; 66 -> 27. b: 69 -> ; 84 -> ;
-                //bool betweenA = a[66]^a[93];//indexe noch anpassen, ansich aber richtig
-                //bool betweenB = b[69]^b[84] ;//Rechenoperation stimmt erstmal, idexe noch änder warscheinlich noch
-                //bool betweenC = c[66]^c[111];//auh hier richtig bis auf die indexe
-
-                //Vermeindlich nagpasste indexe (oben die orginal fals die falsch):
-                bool betweenA = a[26]^a[0];
-                bool betweenB = b[14]^b[0] ;
-                bool betweenC = c[44]^c[110];
+                bool betweenA = a[66]^a[93];//indexe noch anpassen, ansich aber richtig
+                bool betweenB = b[69]^b[84] ;//Rechenoperation stimmt erstmal, idexe noch änder warscheinlich noch
+                bool betweenC = c[66]^c[111];//auh hier richtig bis auf die indexe
 
                 //Auch noch mal neu machen:
-                //bool insertB = betweenA ^ (a[91]&a[92]) ^ b[78];
-                //bool insertC = betweenB ^ (b[82]&b[83]) ^ c[87];
-                //bool insertA = betweenC ^ (c[108]&c[110]) ^ a[69];
-
-                //Versuch richtige oben drüber:
-                bool insertB = betweenA ^ (a[1]&a[0]) ^ b[5];
-                bool insertC = betweenB ^ (b[1]&b[0]) ^ c[23];
-                bool insertA = betweenC ^ (c[2]&c[0]) ^ a[23];
-
+                bool insertB = betweenA ^ (a[91]&a[92]) ^ b[78];
+                bool insertC = betweenB ^ (b[82]&b[83]) ^ c[87];
+                bool insertA = betweenC ^ (c[108]&c[110]) ^ a[69];
 
                 //Das alles sollte richtigsein.
                 a >>=1;
@@ -333,7 +331,7 @@ namespace advance {
             //das ausgabe bit ist: betweenA ^ betweenB ^ betweenC
             for (auto i = 0; i < keystream.size(); i++) {
                 //Die vermeintlich richtigen:
-                /*
+
                 bool betweenA = a[66]^a[93];//indexe noch anpassen, ansich aber richtig
                 bool betweenB = b[69]^b[84] ;//Rechenoperation stimmt erstmal, idexe noch änder warscheinlich noch
                 bool betweenC = c[66]^c[111];//auh hier richtig bis auf die indexe
@@ -341,17 +339,6 @@ namespace advance {
                 bool insertB = betweenA ^ (a[91]&a[92]) ^ b[78];
                 bool insertC = betweenB ^ (b[82]&b[83]) ^ c[87];
                 bool insertA = betweenC ^ (c[108]&c[110]) ^ a[69];
-                */
-
-                //Die neuen versuche:
-                bool betweenA = a[26]^a[0];
-                bool betweenB = b[14]^b[0] ;
-                bool betweenC = c[44]^c[110];
-
-                bool insertB = betweenA ^ (a[1]&a[0]) ^ b[5];
-                bool insertC = betweenB ^ (b[1]&b[0]) ^ c[23];
-                bool insertA = betweenC ^ (c[2]&c[0]) ^ a[23];
-
 
                 //Das alles sollte richtigsein.
                 a >>=1;
@@ -368,7 +355,7 @@ namespace advance {
             return keystream;
         }
         //Void als DT ändern wenn man das ganze intern weiter verarbeiten wollen würde.
-        inline void entschlusseln_trivium_for_ASII(std::vector<bool> &keystream_trivium, std::vector<std::bitset<8>> &message_in_bit) {
+        inline void entschlusseln_trivium_for_ASCII(std::vector<bool> &keystream_trivium, std::vector<std::bitset<8>> &message_in_bit) {
             //Ist ja nur bit ^ bit also...
 
         }
