@@ -96,13 +96,9 @@ int main() {
 
                 std::vector<std::bitset<8>> clear_message_in_bit = ascii_to_bit(clear_message);
                 std::vector<std::bitset<8>> keystream_for_trivium = advance::trivium::keystream_trivium_for_ASCII(clear_message_in_bit);    //Sollte einen keystrema ausgen der so lange in bit ist wie meine mesage in bit.
-                //PROBLEME: 1. Nimmt nur bis zum ersten Leerzeichen. 2. Der Keystream ist irgendwie Müll und hat ein ganz klares Muster.
+                //PROBLEME: 1. Nimmt nur bis zum ersten Leerzeichen (Wenn mann das Leerzeichen weglässt, dann klappt es von der länge her, keystream ist dennoch mist). 2. Der Keystream ist irgendwie Müll und hat ein ganz klares Muster.
                 //Das mit dem Muster wird ziemlich sicher an den neuen indexen liegen. Das andere keine Ahnung.
-                for (auto & i : keystream_for_trivium) {
-                    for (auto j =0;j<i.size();j++) {
-                        std::cout << i[j];
-                    }
-                }
+
 
             }
             else if (option == 2) {
