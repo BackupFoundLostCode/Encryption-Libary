@@ -1,5 +1,6 @@
 #include <bitset>
 #include <vector>
+#include <limits>
 
 #include "crypt.h"
 
@@ -43,78 +44,88 @@ int main() {
      * 4. LFSR
      */
 
-    int input;
-
+    int input = {};
     std::cout << "[1] OTP\n[2] Trivium" << std::endl;
     std::cin >> input;
 
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
     switch (input) {
-        //Klapt ansich, muss nur nochmal schauen warum er wenn ich euien satz verschlüssel mit leerezieen nur das vor dem ersten lelrzeiechn nimmt (verschlüsselt und entschlüsselt aber richtig) undwarum nach dem insert des keys und der massage dennoch invalit number ausgelöst wird.
+
         case 1: {
-            int option;
-            std::cout << "\n[1] Encrypt Message.\n[2] Decrypt Message.";
-            std::cin >> option;
 
-            if (option == 1) {
-                std::string message;
-                std::cout << "OTP:" << std::endl << "Insert your Text:" << std::endl;
-                std::cin >> message;
-                std::vector<std::bitset<8>> message_in_bit = ascii_to_bit(message);
-                std::vector<std::bitset<8>> otp_key = streamCipher::stream_key_OTP(message_in_bit);
-                std::vector<std::bitset<8>> encrypt_message = streamCipher::stream_verschlusseln_OTP(message_in_bit, otp_key);
+            int input2 = {};
+            std::cout << "[1] Encrypt Message\n[2] Encrypt Message" <<std::endl;
+            std::cin >> input2;
 
-                std::cout << std::endl;
-                std::cout << "\nYour encrypted Message: " << std::endl;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+
+            if (input2 == 1) {
+                std::string message = {};
+                std::cout << "Insert Message:" <<std::endl;
+                std::getline(std::cin,message);
+                std::vector<std::bitset<8>> message_in_bin = ascii_to_bit(message);
+
+                std::vector<std::bitset<8>> key_stream = streamCipher::stream_key_OTP(message_in_bin);
+                std::vector<std::bitset<8>> encrypt_message = streamCipher::stream_verschlusseln_OTP(message_in_bin,key_stream);
+
+                std::cout <<"\nDie Verschlüsselte Nachricht:" <<std::endl;
                 for (auto i : encrypt_message) {
                     std::cout << i;
                 }
             }
-            else if (option == 2) {
-                std::string encypt_message;
-                std::string key_for_message;
-                std::cout << "\n Insert Encrypted Message:" << std::endl;
-                std::cin >> encypt_message;
-                std::cout << "\n Insert Key:" << std::endl;
-                std::cin >> key_for_message;
+            else if (input2 == 2) {
+                std::string encrypted_message2 ={};
+                std::string key = {};
 
-                streamCipher::stream_entschlusseln_OTP(key_for_message, encypt_message);
+                std::cout << "Insert Message:" <<std::endl;
+                std::cin >> encrypted_message2;
+                std::cout << "Insert Key:" <<std::endl;
+                std::cin >> key;
+
+                streamCipher::stream_entschlusseln_OTP(key,encrypted_message2);
+
             }
             else {
-                std::cout << "Invalid Number!" << std::endl;
+                std::cout << "Invalid Number!" <<std::endl;
             }
-            break;
         }
+            break;
         case 2: {
-            int option;
-            std::cout << "\n[1] Encrypt Message.\n[2] Decrypt Message.";
-            std::cin >> option;
 
-            if (option == 1) {
-                std::string clear_message;
-                std::cout << "Insert clear Message:" << std::endl;
-                std::cin >> clear_message;
+            int input2 = {};
+            std::cout << "[1] Encrypt Message\n[2] Encrypt Message" <<std::endl;
+            std::cin >> input2;
 
-                std::vector<std::bitset<8>> clear_message_in_bit = ascii_to_bit(clear_message);
-                std::vector<std::bitset<8>> keystream_for_trivium = advance::trivium::keystream_trivium_for_ASCII(clear_message_in_bit);    //Sollte einen keystrema ausgen der so lange in bit ist wie meine mesage in bit.
-                //PROBLEME: 1. Nimmt nur bis zum ersten Leerzeichen (Wenn mann das Leerzeichen weglässt, dann klappt es von der länge her, keystream ist dennoch mist). 2. Der Keystream ist irgendwie Müll und hat ein ganz klares Muster.
-                //Das mit dem Muster wird ziemlich sicher an den neuen indexen liegen. Das andere keine Ahnung.
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
+            if (input2 == 1) {
+                std::string message = {};
+                std::cout << "Insert Message:" <<std::endl;
+                std::getline(std::cin,message);
 
+                std::vector<std::bitset<8>> message_in_bit = ascii_to_bit(message);
+                std::vector<std::bitset<8>> Keystream = advance::trivium::keystream_trivium_for_ASCII(message_in_bit);
+                //Dann hier verschlüsseln:
             }
-            else if (option == 2) {
-                std::cout << "\n Insert Encrypted Message:" << std::endl;
-
+            else if (input2 == 2) {
+                //Hier einfach dann entschlüsseln:
             }
             else {
-                std::cout << "Invalid Number!" << std::endl;
-
+                std::cout << "Invalid Number!" <<std::endl;
             }
+        }
             break;
-        }
         default: {
-            std::cout << "Invalid Number!" << std::endl;
-        }
+            std::cout << "Invalid Number!" <<std::endl;
+        };
     }
+
+
+
+
+
 
     return 0;
 }

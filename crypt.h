@@ -138,7 +138,7 @@ namespace streamCipher  {
                 key[i][j] = real_random_numbers();
             }
         }
-        std::cout << "THIS IS YOUR KEY, SAFE THE KEY IN BIT: " << std::endl;
+        std::cout << "\nTHIS IS YOUR KEY, SAFE THE KEY IN BIT: " << std::endl;
         for (auto i : key) {
             std::cout << i;
         }
@@ -159,6 +159,7 @@ namespace streamCipher  {
         return message;
     }
     //
+    //Eventuell ist hier ein fehler!
     inline void stream_entschlusseln_OTP(const std::string &keyToString, const std::string &verMessage) {
         std::vector<std::bitset<8>> keyInCell;
         std::vector< std::bitset<8>> newMessage;
@@ -355,7 +356,12 @@ namespace advance {
             return keystream;
         }
         //Void als DT ändern wenn man das ganze intern weiter verarbeiten wollen würde.
-        inline void entschlusseln_trivium_for_ASCII(std::vector<bool> &keystream_trivium, std::vector<std::bitset<8>> &message_in_bit) {
+        inline void entschlusseln_trivium_for_ASCII(std::vector<std::bitset<8>> &keystream_trivium, std::vector<std::bitset<8>> &message_in_bit) {
+            //Ist ja nur bit ^ bit also...
+
+        }
+        //
+        inline void verschlusseln_trivium_for_ASCII(std::vector<std::bitset<8>> &keystream_trivium, std::vector<std::bitset<8>> &message_in_bit) {
             //Ist ja nur bit ^ bit also...
 
         }
