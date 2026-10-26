@@ -356,14 +356,49 @@ namespace advance {
             return keystream;
         }
         //Void als DT ändern wenn man das ganze intern weiter verarbeiten wollen würde.
-        inline void entschlusseln_trivium_for_ASCII(std::vector<std::bitset<8>> &keystream_trivium, std::vector<std::bitset<8>> &message_in_bit) {
+        inline void entschlusseln_trivium_for_ASCII(const std::string &keyToString, const std::string &verMessage) {
             //Ist ja nur bit ^ bit also...
+            std::vector<std::bitset<8>> keyInCell;
+            std::vector< std::bitset<8>> newMessage;
+            std::vector<std::bitset<8>> message = string_to_bitset(verMessage);
+
+            message.resize(keyToString.size()/8);
+            keyInCell.resize(keyToString.size()/8);
+            newMessage.resize(keyToString.size()/8);
+
+            if (keyToString.size()%8 !=0 || keyToString.size() !=  verMessage.size()) {
+                std::cout << "Nicht genug Bit vorhanden, Key und Nachricht müssen die gleiche anzahl Bit haben." << std::endl;
+                std::cout << "Länge Key: " << keyToString.length() << std::endl;
+                std::cout << "Länge der verschlüsselten Nachricht: : " << verMessage.size() << std::endl;
+
+                exit(1);
+            }
+
+            keyInCell = string_to_bitset(keyToString);
+
+            for (auto i = 0; i < newMessage.size(); i++) {
+                for (auto j = 0; j < 8; j++) {
+                    newMessage[i][j] = (keyInCell[i][j] + message[i][j])%2;
+                }
+            }
+
+            std::cout << "Your Message:" << std::endl;
+            bit_to_ascii(newMessage);
 
         }
         //
-        inline void verschlusseln_trivium_for_ASCII(std::vector<std::bitset<8>> &keystream_trivium, std::vector<std::bitset<8>> &message_in_bit) {
+        inline std::vector<std::bitset<8>> verschlusseln_trivium_for_ASCII(const std::vector<std::bitset<8>> &keystream_trivium, const std::vector<std::bitset<8>> &message_in_bit) {
             //Ist ja nur bit ^ bit also...
+            std::vector<std::bitset<8>> message;
+            message.resize(message_in_bit.size());
 
+            for (auto i = 0; i < message.size(); i++) {
+                for (auto j = 0; j < 8; j++) {
+                    message[i][j] = (message_in_bit[i][j] + keystream_trivium[i][j])%2;
+                }
+            }
+
+            return message;
         }
 
     }

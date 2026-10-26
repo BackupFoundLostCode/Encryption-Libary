@@ -55,7 +55,7 @@ int main() {
         case 1: {
 
             int input2 = {};
-            std::cout << "[1] Encrypt Message\n[2] Encrypt Message" <<std::endl;
+            std::cout << "[1] Encrypt Message\n[2] Decrypt Message" <<std::endl;
             std::cin >> input2;
 
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -85,7 +85,6 @@ int main() {
                 std::cin >> key;
 
                 streamCipher::stream_entschlusseln_OTP(key,encrypted_message2);
-
             }
             else {
                 std::cout << "Invalid Number!" <<std::endl;
@@ -95,7 +94,7 @@ int main() {
         case 2: {
 
             int input2 = {};
-            std::cout << "[1] Encrypt Message\n[2] Encrypt Message" <<std::endl;
+            std::cout << "[1] Encrypt Message\n[2] Decrypt Message" <<std::endl;
             std::cin >> input2;
 
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -106,11 +105,32 @@ int main() {
                 std::getline(std::cin,message);
 
                 std::vector<std::bitset<8>> message_in_bit = ascii_to_bit(message);
-                std::vector<std::bitset<8>> Keystream = advance::trivium::keystream_trivium_for_ASCII(message_in_bit);
+                std::vector<std::bitset<8>> keystream = advance::trivium::keystream_trivium_for_ASCII(message_in_bit);
+
+                //LETZETES PROBLEM, DER HIER IST IMER GLEICH IRGENDWIE ANSOSNTEN ALLES DURCHDENKE ICH!!!!!!!!!!!!!!!!!!!!!!!!!
+                std::cout << "New generated Key: " << std::endl;
+                for (auto i : keystream) {
+                    std::cout << i;
+                }
                 //Dann hier verschlüsseln:
+                std::vector<std::bitset<8>> encrypt_message = advance::trivium::verschlusseln_trivium_for_ASCII(keystream, message_in_bit);
+
+                std::cout << "\nVerschlüsselte Nachricht:" << std::endl;
+                for (auto i : encrypt_message) {
+                    std::cout << i;
+                }
             }
             else if (input2 == 2) {
                 //Hier einfach dann entschlüsseln:
+                std::string encrypted_message2 ={};
+                std::string key = {};
+
+                std::cout << "Insert Message:" <<std::endl;
+                std::cin >> encrypted_message2;
+                std::cout << "Insert Key:" <<std::endl;
+                std::cin >> key;
+
+                advance::trivium::entschlusseln_trivium_for_ASCII(key,encrypted_message2);
             }
             else {
                 std::cout << "Invalid Number!" <<std::endl;
@@ -121,11 +141,6 @@ int main() {
             std::cout << "Invalid Number!" <<std::endl;
         };
     }
-
-
-
-
-
 
     return 0;
 }
