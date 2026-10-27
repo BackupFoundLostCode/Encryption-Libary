@@ -112,7 +112,7 @@ int main() {
                 for (auto i : keystream) {
                     std::cout << i;
                 }
-                //Dann hier verschlüsseln:
+
                 std::vector<std::bitset<8>> encrypt_message = advance::trivium::verschlusseln_trivium_for_ASCII(keystream, message_in_bit);
 
                 std::cout << "\nVerschlüsselte Nachricht:" << std::endl;

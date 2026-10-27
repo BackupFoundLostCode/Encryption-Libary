@@ -256,7 +256,7 @@ namespace advance {
         //Generell: mal schauen ob ich die returnarten und auch generell alpassen kann und sollte also alles eiheitlich wenns geht am beten alles bitset.
         //Ach scheiße ich muss das alles doch auf std::bitset anpassen. Also entwerder pures bitset oder auch vector mit bitset. Sollt das auf bitset<8> anpassen, weil ich das ermal nur für buchstaben machen will ansonsten kann die gelichennochmal schireben aber eben mit einzlenen bools oder bitset mit <1>.
 
-        //Vector stat bool zu bitset<8> vermutlich ersetzen.
+        //HIER IST DER LETZTE FEHLER, Keystrem wird immer gelich gernerit ansonsten alles gucci.
         inline std::vector<std::bitset<8>> keystream_trivium_for_ASCII(const std::vector<std::bitset<8>> &message_in_bit) {
             std::bitset<93> a;
             std::bitset<84> b;
