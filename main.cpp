@@ -60,7 +60,6 @@ int main() {
 
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-
             if (input2 == 1) {
                 std::string message = {};
                 std::cout << "Insert Message:" <<std::endl;

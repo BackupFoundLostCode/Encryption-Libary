@@ -274,12 +274,11 @@ namespace advance {
             std::vector<std::bitset<8>> keystream;//das in bitset<8> stat bool umändern (?)
             keystream.resize(message_in_bit.size());
 
-            for (auto i = 0; i < iv_trivium.size(); i++) {
+            for (auto i = 0; i < 80; i++) {
                 iv_trivium[i] = real_random_numbers();
-            }
-            for (auto i = 0; i < key.size(); i++) {
                 key[i] = real_random_numbers();
             }
+
             std::cout << "IV: " << iv_trivium << " länge: "<< iv_trivium.size() << std::endl;
             std::cout << "KEY: " << key << " länge: "<< key.size() << std::endl;
             std::cout << "" << std::endl;
