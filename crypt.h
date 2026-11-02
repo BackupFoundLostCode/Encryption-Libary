@@ -159,7 +159,6 @@ namespace streamCipher  {
         return message;
     }
     //
-    //Eventuell ist hier ein fehler!
     inline void stream_entschlusseln_OTP(const std::string &keyToString, const std::string &verMessage) {
         std::vector<std::bitset<8>> keyInCell;
         std::vector< std::bitset<8>> newMessage;
@@ -195,14 +194,9 @@ namespace streamCipher  {
 namespace advance {
 
     namespace modi {
-        //für die Breueibsmode CTR, ECB,CTC, usw.
-
-
-
-
-
-        }
-
+        //für die Betriebsmodi CTR, ECB,CTC, usw.
+    }
+    //
     inline void right_shift_register(const int chiffts) {
         std::bitset<8> shiftRegister;
 
@@ -253,10 +247,8 @@ namespace advance {
     }
 
     namespace trivium {
-        //Generell: mal schauen ob ich die returnarten und auch generell alpassen kann und sollte also alles eiheitlich wenns geht am beten alles bitset.
-        //Ach scheiße ich muss das alles doch auf std::bitset anpassen. Also entwerder pures bitset oder auch vector mit bitset. Sollt das auf bitset<8> anpassen, weil ich das ermal nur für buchstaben machen will ansonsten kann die gelichennochmal schireben aber eben mit einzlenen bools oder bitset mit <1>.
 
-        //HIER IST DER LETZTE FEHLER, Keystrem wird immer gelich gernerit ansonsten alles gucci.
+        //Mögliche Fehlerquellen: Indexe, Chifting, Aufwärmphase, vieleicht was doppelt gemacht. Problem ist halt das der Keystream nicht richtig rauskommt.
         inline std::vector<std::bitset<8>> keystream_trivium_for_ASCII(const std::vector<std::bitset<8>> &message_in_bit) {
             std::bitset<93> a;
             std::bitset<84> b;
@@ -270,8 +262,7 @@ namespace advance {
             std::cout << "C: " << c << " Länge: " << c.size() << std::endl;
             std::cout << "" << std::endl;
 
-            //ändern zu bitset, im zweifelsfall vector mit einer stelle als bitset ab dem punkt einfach nur ein Bitset.
-            std::vector<std::bitset<8>> keystream;//das in bitset<8> stat bool umändern (?)
+            std::vector<std::bitset<8>> keystream;
             keystream.resize(message_in_bit.size());
 
             for (auto i = 0; i < 80; i++) {
@@ -298,8 +289,6 @@ namespace advance {
             std::cout << "Der gefüllte c mit den einsen: " << c << " länge: " << c.size() <<std::endl;
             std::cout << "" << std::endl;
 
-            //HIER JETZT ABER WIRKLICH NOCHMAL DRÜBER GEHEN, ES KOMMT KOMISCHER KRAM RASU:
-
             //Aufwärmphase:
             //Was in die gatter geschieben wird (indexe dannauch noch an bitset anpassen):  Rückkoblung in a: betweenA = betweenA ^ (a[91]&a[92]) ^ b[78] das wird später in register b geschireben
             //betweenB = betweenB ^ (b[82]&b[83]) ^ c[87] das wird dann ich register c geschireben
@@ -308,19 +297,17 @@ namespace advance {
                 //Bitset: 0 -> max index, sorich wenn array 0 gewollt ist in bitset die 0 der maximale eintrag des bitsets.
                 //Hier sind die indexe vermutlich nicht korrekt, auch die genrelle rechung glaube ich nicht. DAS IST VERMUTLICH DIE LETZE FEHLERQUELLE!
                 //a: 93 -> 0; 66 -> 27. b: 69 -> ; 84 -> ;
-                bool betweenA = a[66]^a[93];//indexe noch anpassen, ansich aber richtig
-                bool betweenB = b[69]^b[84] ;//Rechenoperation stimmt erstmal, idexe noch änder warscheinlich noch
-                bool betweenC = c[66]^c[111];//auh hier richtig bis auf die indexe
+                bool betweenA = a[66]^a[93];
+                bool betweenB = b[69]^b[84] ;
+                bool betweenC = c[66]^c[111];
 
-                //Auch noch mal neu machen:
                 bool insertB = betweenA ^ (a[91]&a[92]) ^ b[78];
                 bool insertC = betweenB ^ (b[82]&b[83]) ^ c[87];
                 bool insertA = betweenC ^ (c[108]&c[110]) ^ a[69];
 
-                //Das alles sollte richtigsein.
-                a >>=1;
-                b >>=1;
-                c >>=1;
+                a <<=1;
+                b <<=1;
+                c <<=1;
 
                 a[92] = insertA;
                 b[83] = insertB;
@@ -329,34 +316,31 @@ namespace advance {
 
             //Eigentliochen Keystrem erzeugen:
             //das ausgabe bit ist: betweenA ^ betweenB ^ betweenC
-            for (auto i = 0; i < keystream.size(); i++) {
-                //Die vermeintlich richtigen:
+            for (auto & i : keystream) {
 
-                bool betweenA = a[66]^a[93];//indexe noch anpassen, ansich aber richtig
-                bool betweenB = b[69]^b[84] ;//Rechenoperation stimmt erstmal, idexe noch änder warscheinlich noch
-                bool betweenC = c[66]^c[111];//auh hier richtig bis auf die indexe
+                bool betweenA = a[66]^a[93];
+                bool betweenB = b[69]^b[84] ;
+                bool betweenC = c[66]^c[111];
 
                 bool insertB = betweenA ^ (a[91]&a[92]) ^ b[78];
                 bool insertC = betweenB ^ (b[82]&b[83]) ^ c[87];
                 bool insertA = betweenC ^ (c[108]&c[110]) ^ a[69];
 
-                //Das alles sollte richtigsein.
-                a >>=1;
-                b >>=1;
-                c >>=1;
+                a <<=1;
+                b <<=1;
+                c <<=1;
 
                 a[92] = insertA;
                 b[83] = insertB;
                 c[110] = insertC;
 
-                keystream[i] = betweenA ^ betweenB ^betweenC;
+                i = betweenA ^ betweenB ^betweenC;
             }
 
             return keystream;
         }
-        //Void als DT ändern wenn man das ganze intern weiter verarbeiten wollen würde.
+        //
         inline void entschlusseln_trivium_for_ASCII(const std::string &keyToString, const std::string &verMessage) {
-            //Ist ja nur bit ^ bit also...
             std::vector<std::bitset<8>> keyInCell;
             std::vector< std::bitset<8>> newMessage;
             std::vector<std::bitset<8>> message = string_to_bitset(verMessage);
@@ -383,11 +367,9 @@ namespace advance {
 
             std::cout << "Your Message:" << std::endl;
             bit_to_ascii(newMessage);
-
         }
         //
         inline std::vector<std::bitset<8>> verschlusseln_trivium_for_ASCII(const std::vector<std::bitset<8>> &keystream_trivium, const std::vector<std::bitset<8>> &message_in_bit) {
-            //Ist ja nur bit ^ bit also...
             std::vector<std::bitset<8>> message;
             message.resize(message_in_bit.size());
 
