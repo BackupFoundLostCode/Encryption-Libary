@@ -41,7 +41,7 @@ inline void bit_to_ascii(const std::vector<std::bitset<8>> &textInBit) {
         std::cout << static_cast<char>(i.to_ullong());
     }
 }
-//Die meode fintioniert rtmal allerdings garstiert es mit nivht das die zahlen wriklich zufall sind und die kontrolle scheinbar auch nict erstmal aber nicht wild.
+
 inline int real_random_numbers() {
 
     int result = {};
@@ -370,6 +370,27 @@ namespace advance {
             return message;
         }
     }
+    namespace DES {
+        /* 64 Bit pro Block.
+         * 56 Bit im key.
+         * Die 64 Klartext werden in der mitte geteilt in jeweils Li und Ri.
+         * 16 Runden.
+         * Ri wird in f-Funktion gesteckt, dann das Ergebnis daraus XOR mit Li.
+         * Li = Ri-1.
+         * Ri = Li-1 XOR f(Ri-1,Ki).
+         */
+        inline std::vector<std::bitset<64>> verschlusseln_DES_ASCII(std::vector<std::bitset<8>> &messageIn_bit) {
+            std::vector<std::bitset<56>> key;//doch 64? unsicher buch sagt so KI bei Nachfrage 64 aber es werden 56. Nicht sicher ob ich dann einfach 56 nehmen kann oder es wichtig ist was mit den fehlenden 8 passiert.
+            std::vector<std::bitset<64>> message_block;//Ein Klartextblock, eventuell nichtmal nötig.
+            std::vector<std::bitset<32>> l;//Linke Hälfte des Blocks
+            std::vector<std::bitset<32>> r;//Rechte hälfte des Blocks.
+            std::vector<std::bitset<64>> message_all_blocks;//Dachte ich speicher pro Zell einen Blck, und am ende aben die ganze nachricht verschlüsselt. Speichert also L16 und R16 n einer Zelle zusammen.
+
+            return message_all_blocks;
+        }
+
+    }
+    //
     namespace AES {
         namespace Modi {
 
@@ -377,12 +398,11 @@ namespace advance {
         //Auswahl der Modi, Auswahl der Keysizes (erstmal nur 128 Bit).
         inline std::vector<std::bitset<128>> verschlusselung_AES_ASCII() {
             std::vector<std::bitset<128>> crypt_block;//Jeder Block in aes sind ja festgelegte anzahl bist, der hier ist einfach für einen ausgabeblock für AES 128.
-            std::vector<std::bitset<128>> all_crypt_blocks;//Hier speicher ich dann einfach die einzenen 128 bit blöcke bis ich die ganze nachricht mit Padding (oder ohne? muss nochmaö schauen wie genau das mit den Modi ist)
+            std::vector<std::bitset<128>> all_crypt_blocks;//Hier speicher ich dann einfach die einzenen 128 bit blöcke bis ich die ganze nachricht mit Padding (oder ohne? muss nochmal schauen wie genau das mit den Modi ist)
 
 
             return all_crypt_blocks;
         }
-
 
     }
 }
