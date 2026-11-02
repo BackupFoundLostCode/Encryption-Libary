@@ -70,16 +70,13 @@ inline bool ggT(const int number, const int modulo) {
     return std::gcd(number, modulo) == 1;
 }
 //
-//
-//ERLEDIGT
 namespace affineEncryption {
-    //nur für das alphabet gemacht momentan.
-    //Sollte das mal optimierern das geht sonst nur pro buchtsbae so das der einzeln übernimmt oder so (NOTIZ WENN REST FERTIG UND IN DER MAIN DANN GEBAUT WIRD)
-    inline std::string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWKYZ";//Damit ich die Indexe mir anschauen kann, habs nach ner woche schon vergessen gehabt, warum und musste ne minute nachdenken, warum das hier steht. Für dich Zukunfts-Ich.
+
+    inline std::string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWKYZ";
 
 
     inline int affine_Encryption(const int keyA, const int keyB, const int index) {
-        //muss gelten ggt(a,m) = 1, mod = 26 weil alphabet, wenn etwas %Zn dann Ergebnis immer kleiner Zn+1.
+        
         int result = {};
 
         if (ggT(keyA, 26)) {
@@ -370,14 +367,7 @@ namespace advance {
         }
     }
     namespace DES {
-        /* 64 Bit pro Block.
-         * 56 Bit im key.
-         * Die 64 Klartext werden in der mitte geteilt in jeweils Li und Ri.
-         * 16 Runden.
-         * Ri wird in f-Funktion gesteckt, dann das Ergebnis daraus XOR mit Li.
-         * Li = Ri-1.
-         * Ri = Li-1 XOR f(Ri-1,Ki).
-         */
+     
         inline std::vector<std::bitset<64>> verschlusseln_DES_ASCII(std::vector<std::bitset<8>> &messageIn_bit) {
             std::vector<std::bitset<56>> key;//doch 64? unsicher buch sagt so KI bei Nachfrage 64 aber es werden 56. Nicht sicher ob ich dann einfach 56 nehmen kann oder es wichtig ist was mit den fehlenden 8 passiert.
             std::vector<std::bitset<64>> message_block;//Ein Klartextblock, eventuell nichtmal nötig.
@@ -392,8 +382,8 @@ namespace advance {
     namespace AES {
         namespace Modi {
 
+
         }
-        //Auswahl der Modi, Auswahl der Keysizes (erstmal nur 128 Bit).
         inline std::vector<std::bitset<128>> verschlusselung_AES_ASCII() {
             std::vector<std::bitset<128>> crypt_block;//Jeder Block in aes sind ja festgelegte anzahl bist, der hier ist einfach für einen ausgabeblock für AES 128.
             std::vector<std::bitset<128>> all_crypt_blocks;//Hier speicher ich dann einfach die einzenen 128 bit blöcke bis ich die ganze nachricht mit Padding (oder ohne? muss nochmal schauen wie genau das mit den Modi ist)
