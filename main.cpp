@@ -5,9 +5,6 @@
 #include "crypt.h"
 
 
-
-
-
 int main() {
     /* GENERELLE IDEEN:
      * 1. Nochmal substring anschauen.
@@ -45,7 +42,7 @@ int main() {
      */
 
     int input = {};
-    std::cout << "[1] OTP\n[2] Trivium" << std::endl;
+    std::cout << "[1] OTP\n[2] Trivium\n[3] AES\n" << std::endl;
     std::cin >> input;
 
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -106,7 +103,6 @@ int main() {
                 std::vector<std::bitset<8>> message_in_bit = ascii_to_bit(message);
                 std::vector<std::bitset<8>> keystream = advance::trivium::keystream_trivium_for_ASCII(message_in_bit);
 
-                //LETZETES PROBLEM, DER HIER IST IMER GLEICH IRGENDWIE ANSOSNTEN ALLES DURCHDENKE ICH!!!!!!!!!!!!!!!!!!!!!!!!!
                 std::cout << "New generated Key: " << std::endl;
                 for (auto i : keystream) {
                     std::cout << i;
@@ -134,6 +130,11 @@ int main() {
             else {
                 std::cout << "Invalid Number!" <<std::endl;
             }
+        }
+            break;
+        case 3: {
+            //AES:
+
         }
             break;
         default: {

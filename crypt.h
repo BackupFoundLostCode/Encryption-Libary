@@ -193,10 +193,6 @@ namespace streamCipher  {
 //
 namespace advance {
 
-    namespace modi {
-        //für die Betriebsmodi CTR, ECB,CTC, usw.
-    }
-    //
     inline void right_shift_register(const int chiffts) {
         std::bitset<8> shiftRegister;
 
@@ -382,6 +378,20 @@ namespace advance {
 
             return message;
         }
+    }
+    namespace AES {
+        namespace Modi {
+
+        }
+        //Auswahl der Modi, Auswahl der Keysizes (erstmal nur 128 Bit).
+        inline std::vector<std::bitset<128>> verschlusselung_AES_ASCII() {
+            std::vector<std::bitset<128>> crypt_block;//Jeder Block in aes sind ja festgelegte anzahl bist, der hier ist einfach für einen ausgabeblock für AES 128.
+            std::vector<std::bitset<128>> all_crypt_blocks;//Hier speicher ich dann einfach die einzenen 128 bit blöcke bis ich die ganze nachricht mit Padding (oder ohne? muss nochmaö schauen wie genau das mit den Modi ist)
+
+
+            return all_crypt_blocks;
+        }
+
 
     }
 }
