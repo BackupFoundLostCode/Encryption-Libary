@@ -40,7 +40,6 @@ int main() {
      * 3. One-Time-Pad (OTP).
      * 4. LFSR
      */
-
     int input = {};
     std::cout << "[1] OTP\n[2] Trivium\n[3] AES\n" << std::endl;
     std::cin >> input;

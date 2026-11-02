@@ -190,7 +190,6 @@ namespace streamCipher  {
 
 }
 //
-//
 namespace advance {
 
     inline void right_shift_register(const int chiffts) {
