@@ -388,7 +388,6 @@ namespace advance {
 
             return message_all_blocks;
         }
-
     }
     //
     namespace AES {
@@ -403,6 +402,5 @@ namespace advance {
 
             return all_crypt_blocks;
         }
-
     }
 }
