@@ -274,18 +274,17 @@ namespace advance {
             std::cout << "KEY: " << key << " länge: "<< key.size() << std::endl;
             std::cout << "" << std::endl;
 
-            for (auto i = 79; i >= 0; i--) {
-                a[i + 13] = iv_trivium[i];
+            for (auto i = 0; i < 80; i++) {
+                a[i] = key[i];
+                b[i] = iv_trivium[i];
             }
+
+            c[108]= true;
+            c[109]= true;
+            c[110]= true;
+
             std::cout << "Der gefüllte a mit den iv: " << a << " länge: " << a.size() <<std::endl;
-            for (auto i = 79; i >= 0; i--) {
-                b[i+ +4] = key[i];
-            }
             std::cout << "Der gefüllte b mit den key: " << b << " Länge: " << b.size() <<std::endl;
-            //C:
-            c[0]= true;
-            c[1]= true;
-            c[2]= true;
             std::cout << "Der gefüllte c mit den einsen: " << c << " länge: " << c.size() <<std::endl;
             std::cout << "" << std::endl;
 
@@ -297,44 +296,46 @@ namespace advance {
                 //Bitset: 0 -> max index, sorich wenn array 0 gewollt ist in bitset die 0 der maximale eintrag des bitsets.
                 //Hier sind die indexe vermutlich nicht korrekt, auch die genrelle rechung glaube ich nicht. DAS IST VERMUTLICH DIE LETZE FEHLERQUELLE!
                 //a: 93 -> 0; 66 -> 27. b: 69 -> ; 84 -> ;
-                bool betweenA = a[66]^a[93];
-                bool betweenB = b[69]^b[84] ;
-                bool betweenC = c[66]^c[111];
+                bool betweenA = a[65]^a[92];
+                bool betweenB = b[68]^b[83] ;
+                bool betweenC = c[65]^c[110];
 
-                bool insertB = betweenA ^ (a[91]&a[92]) ^ b[78];
-                bool insertC = betweenB ^ (b[82]&b[83]) ^ c[87];
-                bool insertA = betweenC ^ (c[108]&c[110]) ^ a[69];
+                bool insertB = betweenA ^ (a[90]&a[91]) ^ b[77];
+                bool insertC = betweenB ^ (b[81]&b[82]) ^ c[86];
+                bool insertA = betweenC ^ (c[108]&c[109]) ^ a[68];
 
                 a <<=1;
                 b <<=1;
                 c <<=1;
 
-                a[92] = insertA;
-                b[83] = insertB;
-                c[110] = insertC;
+                a[0] = insertA;
+                b[0] = insertB;
+                c[0] = insertC;
             }
 
             //Eigentliochen Keystrem erzeugen:
             //das ausgabe bit ist: betweenA ^ betweenB ^ betweenC
-            for (auto & i : keystream) {
+            for (auto &i : keystream) {
+                for (int bit = 0; bit < 8; bit++) {
 
-                bool betweenA = a[66]^a[93];
-                bool betweenB = b[69]^b[84] ;
-                bool betweenC = c[66]^c[111];
+                    bool betweenA = a[65]^a[92];
+                    bool betweenB = b[68]^b[83] ;
+                    bool betweenC = c[65]^c[110];
 
-                bool insertB = betweenA ^ (a[91]&a[92]) ^ b[78];
-                bool insertC = betweenB ^ (b[82]&b[83]) ^ c[87];
-                bool insertA = betweenC ^ (c[108]&c[110]) ^ a[69];
+                    bool insertB = betweenA ^ (a[90]&a[91]) ^ b[77];
+                    bool insertC = betweenB ^ (b[81]&b[82]) ^ c[86];
+                    bool insertA = betweenC ^ (c[108]&c[109]) ^ a[68];
 
-                a <<=1;
-                b <<=1;
-                c <<=1;
+                    i[bit] = betweenA ^ betweenB ^betweenC;
 
-                a[92] = insertA;
-                b[83] = insertB;
-                c[110] = insertC;
+                    a <<=1;
+                    b <<=1;
+                    c <<=1;
 
-                i = betweenA ^ betweenB ^betweenC;
+                    a[0] = insertA;
+                    b[0] = insertB;
+                    c[0] = insertC;
+                }
             }
 
             return keystream;
