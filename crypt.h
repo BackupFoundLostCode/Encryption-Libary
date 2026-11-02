@@ -244,13 +244,12 @@ namespace advance {
 
     namespace trivium {
 
-        //Mögliche Fehlerquellen: Indexe, Chifting, Aufwärmphase, vieleicht was doppelt gemacht. Problem ist halt das der Keystream nicht richtig rauskommt.
         inline std::vector<std::bitset<8>> keystream_trivium_for_ASCII(const std::vector<std::bitset<8>> &message_in_bit) {
             std::bitset<93> a;
             std::bitset<84> b;
             std::bitset<111> c;
-            std::bitset<80> iv_trivium;//80 random bit.
-            std::bitset<80> key;//key sind nur random bits die aber gemerkt werden müssen genauso wie der IV.
+            std::bitset<80> iv_trivium;
+            std::bitset<80> key;
 
             std::cout << "Die register ohne die key und iv bit: " << std::endl;
             std::cout << "A: " << a << " Länge: " << a.size() << std::endl;
@@ -284,14 +283,8 @@ namespace advance {
             std::cout << "Der gefüllte c mit den einsen: " << c << " länge: " << c.size() <<std::endl;
             std::cout << "" << std::endl;
 
-            //Aufwärmphase:
-            //Was in die gatter geschieben wird (indexe dannauch noch an bitset anpassen):  Rückkoblung in a: betweenA = betweenA ^ (a[91]&a[92]) ^ b[78] das wird später in register b geschireben
-            //betweenB = betweenB ^ (b[82]&b[83]) ^ c[87] das wird dann ich register c geschireben
-            //betweenC betweenC ^ (c[108]&c[110]) ^ a[69] das wird in register a geschireben
             for (auto i =0; i < 1152; i++) {
-                //Bitset: 0 -> max index, sorich wenn array 0 gewollt ist in bitset die 0 der maximale eintrag des bitsets.
-                //Hier sind die indexe vermutlich nicht korrekt, auch die genrelle rechung glaube ich nicht. DAS IST VERMUTLICH DIE LETZE FEHLERQUELLE!
-                //a: 93 -> 0; 66 -> 27. b: 69 -> ; 84 -> ;
+
                 bool betweenA = a[65]^a[92];
                 bool betweenB = b[68]^b[83] ;
                 bool betweenC = c[65]^c[110];
@@ -309,8 +302,6 @@ namespace advance {
                 c[0] = insertC;
             }
 
-            //Eigentliochen Keystrem erzeugen:
-            //das ausgabe bit ist: betweenA ^ betweenB ^ betweenC
             for (auto &i : keystream) {
                 for (int bit = 0; bit < 8; bit++) {
 
